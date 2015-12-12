@@ -6,44 +6,44 @@ function notImplemented () { throw "Not Implemented" };
 function noop (callback) { callback && callback(); };
 
 var properties = {
-	count: notImplemented,
-	each: notImplemented,
-	eachId: notImplemented,
-	batchEach: notImplemented,
-	batchEachId: notImplemented,
+    count: notImplemented,
+    each: notImplemented,
+    eachId: notImplemented,
+    batchEach: notImplemented,
+    batchEachId: notImplemented,
 
-	deleteAugmentedValues: notImplemented,
-	deleteAllAugmentedValues: notImplemented,
+    deleteAugmentedValues: notImplemented,
+    deleteAllAugmentedValues: notImplemented,
 
-	import: notImplemented,
-	beforeImport: noop,
-	afterImport: noop,
+    import: notImplemented,
+    beforeImport: noop,
+    afterImport: noop,
 
-	eachImported: notImplemented,
-	eachImportedId: notImplemented,
-	batchEachImportedId: notImplemented,
-	batchEachImported: notImplemented,
+    eachImported: notImplemented,
+    eachImportedId: notImplemented,
+    batchEachImportedId: notImplemented,
+    batchEachImported: notImplemented,
 
-	countImported: notImplemented,
-	setImported: notImplemented,
-	getImported: notImplemented,
+    countImported: notImplemented,
+    setImported: notImplemented,
+    getImported: notImplemented,
 
-	deleteImported: notImplemented,
-	deleteAllImported: notImplemented,
+    deleteImported: notImplemented,
+    deleteAllImported: notImplemented,
 
-	isImported: notImplemented,
-	phase: function (){}
+    isImported: notImplemented,
+    phase: function (){}
 };
 
 var defaults = {
-	DEFAULT_BATCH_SIZE: 100
+    DEFAULT_BATCH_SIZE: 100
 };
 
 var copy = function (options) {
-	var type = {
-		options: extend(true, {}, defaults, options)
-	};
-	return extend(true, {}, type, properties);
+    var type = {
+        options: extend(true, {}, defaults, options)
+    };
+    return extend(true, {}, type, properties);
 };
 
 module.exports = copy;
