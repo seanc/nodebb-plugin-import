@@ -211,6 +211,7 @@ var async = require('async'),
 
 	Data.countImportedVotes = function(callback) {
 		Data.count('_imported:_votes', callback);
+		Data.count('_imported:_votes', callback);
 	};
 
 	Data.countImportedBookmarks = function(callback) {
