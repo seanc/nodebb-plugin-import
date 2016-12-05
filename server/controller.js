@@ -53,7 +53,7 @@ var fs = require('fs-extra'),
 
 	Controller.postImportToolsAvailble = function () {
 		var state = Controller.state();
-		return (!state || state.now === 'idle') && fs.existsSync(LAST_IMPORT_TIMESTAMP_FILE);
+		return true;
 	};
 
 	Controller.isDirty = function () {
