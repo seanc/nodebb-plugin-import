@@ -1,5 +1,11 @@
-(function(scope) {
+(function(scope, config) {
 	require(['settings', 'csrf'], function(Settings, csrf) {
+
+		csrf = {
+			get: function() {
+				return config.csrf_token;
+			}
+		}
 
 		scope.plugins = scope.plugins || {};
 		var plugin = plugins.import = plugins.import || {};
@@ -764,4 +770,4 @@
 			});
 		});
 	});
-})(this);
+})(this, config);
