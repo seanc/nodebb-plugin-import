@@ -339,7 +339,7 @@ var async = require('async'),
       arePostsDirty ||
       areRoomsDirty ||
       areMessagesDirty ||
-      areBookmarksDirty
+      areBookmarksDirty;
 
     // order in start() and resume() matters and must be in sync
     if (areGroupsDirty) {
