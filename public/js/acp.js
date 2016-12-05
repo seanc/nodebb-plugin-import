@@ -404,20 +404,6 @@
 			}
 		};
 
-		var checkDirty = function() {
-			$.get(plugin.apiHost + '/isDirty')
-					.done(function(data) {
-						if (data && data.isDirty) {
-							utils.toggleVisible($wrapper.find('#import-resume'), true);
-						} else {
-							utils.toggleVisible($wrapper.find('#import-resume'), false);
-						}
-					})
-					.fail(function() {
-						utils.toggleVisible($wrapper.find('#import-resume'), false);
-					});
-		};
-
 		var bindActions = function() {
 			$wrapper.find('[data-action]').each(function(i, el) {
 				el = $(el);
@@ -768,7 +754,6 @@
 			});
 
 			postImportToolsAvailable();
-			checkDirty();
 
 			getState().done(function() {
 				setTimeout(function() {
