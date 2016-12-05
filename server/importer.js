@@ -12,8 +12,7 @@ var async = require('async'),
 
   MAX_INT = Number.MAX_SAFE_INTEGER,
 
-  Groups = require('../../../src/groups.js'),
-  Favourites = require('../../../src/favourites.js'),
+  Groups = require('../../../src/groups.js')
   privileges = require('../../../src/privileges.js'),
   Meta = require('../../../src/meta.js'),
   User = require('../../../src/user.js'),
@@ -42,7 +41,6 @@ var async = require('async'),
   DIRTY_POSTS_FILE = path.join(__dirname, '/tmp/importer.dirty.posts'),
   DIRTY_VOTES_FILE = path.join(__dirname, '/tmp/importer.dirty.votes'),
   DIRTY_BOOKMARKS_FILE = path.join(__dirname, '/tmp/importer.dirty.bookmarks'),
-  DIRTY_FAVOURITES_FILE = path.join(__dirname, '/tmp/importer.dirty.favourites'),
 
   areGroupsDirty,
   areUsersDirty,
@@ -53,7 +51,6 @@ var async = require('async'),
   arePostsDirty,
   areVotesDirty,
   areBookmarksDirty,
-  areFavouritesDirty,
 
   isAnythingDirty,
 
@@ -66,7 +63,6 @@ var async = require('async'),
   alreadyImportedAllPosts = false,
   alreadyImportedAllVotes = false,
   alreadyImportedAllBookmarks = false,
-  alreadyImportedAllFavourites = false,
 
   flushed = false,
 
@@ -207,7 +203,6 @@ var async = require('async'),
       Importer.importPosts,
       Importer.importVotes,
       Importer.importBookmarks,
-      Importer.importFavourites,
       Importer.fixCategoriesParentsAndAbilities,
       Importer.fixGroupsOwners,
       Importer.fixTopicsTeasers,
@@ -282,12 +277,6 @@ var async = require('async'),
       Importer.warn('alreadyImportedAllBookmarks=true, skipping importBookmarks Phase');
     }
 
-    if (! alreadyImportedAllFavourites) {
-      series.push(Importer.importFavourites);
-    } else {
-      Importer.warn('alreadyImportedAllFavourites=true, skipping importFavourites Phase');
-    }
-
     series.push(Importer.fixCategoriesParentsAndAbilities);
     series.push(Importer.fixGroupsOwners);
     series.push(Importer.fixTopicsTeasers);
@@ -311,7 +300,6 @@ var async = require('async'),
     arePostsDirty = true;
     areVotesDirty = true;
     areBookmarksDirty = true;
-    areFavouritesDirty = true;
     isAnythingDirty = true;
 
     alreadyImportedAllGroups = false;
@@ -323,7 +311,6 @@ var async = require('async'),
     alreadyImportedAllPosts = false;
     alreadyImportedAllVotes = false;
     alreadyImportedAllBookmarks = false;
-    alreadyImportedAllFavourites = false;
 
     flushed = false;
 
@@ -342,7 +329,6 @@ var async = require('async'),
     areTopicsDirty = !! fs.existsSync(DIRTY_TOPICS_FILE);
     arePostsDirty = !! fs.existsSync(DIRTY_POSTS_FILE);
     areBookmarksDirty = !! fs.existsSync(DIRTY_BOOKMARKS_FILE);
-    areFavouritesDirty = !! fs.existsSync(DIRTY_FAVOURITES_FILE);
 
     isAnythingDirty =
       areGroupsDirty ||
@@ -353,8 +339,7 @@ var async = require('async'),
       arePostsDirty ||
       areRoomsDirty ||
       areMessagesDirty ||
-      areBookmarksDirty ||
-      areFavouritesDirty;
+      areBookmarksDirty
 
     // order in start() and resume() matters and must be in sync
     if (areGroupsDirty) {
@@ -367,7 +352,6 @@ var async = require('async'),
       alreadyImportedAllPosts = false;
       alreadyImportedAllVotes = false;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
     } else if (areCategoriesDirty) {
       alreadyImportedAllGroups = true;
       alreadyImportedAllCategories = false;
@@ -378,7 +362,6 @@ var async = require('async'),
       alreadyImportedAllPosts = false;
       alreadyImportedAllVotes = false;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
     } else if (areUsersDirty) {
       alreadyImportedAllGroups = true;
       alreadyImportedAllCategories = true;
@@ -389,7 +372,6 @@ var async = require('async'),
       alreadyImportedAllPosts = false;
       alreadyImportedAllVotes = false;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
     } else if (areRoomsDirty) {
       alreadyImportedAllGroups = true;
       alreadyImportedAllCategories = true;
@@ -400,7 +382,6 @@ var async = require('async'),
       alreadyImportedAllPosts = false;
       alreadyImportedAllVotes = false;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
     } else if (areMessagesDirty) {
       alreadyImportedAllGroups = true;
       alreadyImportedAllCategories = true;
@@ -411,7 +392,6 @@ var async = require('async'),
       alreadyImportedAllPosts = false;
       alreadyImportedAllVotes = false;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
     } else if (areTopicsDirty) {
       alreadyImportedAllGroups = true;
       alreadyImportedAllCategories = true;
@@ -422,7 +402,6 @@ var async = require('async'),
       alreadyImportedAllPosts = false;
       alreadyImportedAllVotes = false;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
     } else if (arePostsDirty) {
       alreadyImportedAllGroups = true;
       alreadyImportedAllCategories = true;
@@ -433,7 +412,6 @@ var async = require('async'),
       alreadyImportedAllPosts = false;
       alreadyImportedAllVotes = false;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
     } else if (areVotesDirty) {
       alreadyImportedAllGroups = true;
       alreadyImportedAllCategories = true;
@@ -444,7 +422,6 @@ var async = require('async'),
       alreadyImportedAllPosts = true;
       alreadyImportedAllVotes = false;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
     } else if (areBookmarksDirty) {
       alreadyImportedAllGroups = true;
       alreadyImportedAllCategories = true;
@@ -455,18 +432,6 @@ var async = require('async'),
       alreadyImportedAllPosts = true;
       alreadyImportedAllVotes = true;
       alreadyImportedAllBookmarks = false;
-      alreadyImportedAllFavourites = false;
-    } else if (areFavouritesDirty) {
-      alreadyImportedAllGroups = true;
-      alreadyImportedAllCategories = true;
-      alreadyImportedAllUsers = true;
-      alreadyImportedAllRooms = true;
-      alreadyImportedAllMessages = true;
-      alreadyImportedAllTopics = true;
-      alreadyImportedAllPosts = true;
-      alreadyImportedAllVotes = true;
-      alreadyImportedAllBookmarks = true;
-      alreadyImportedAllFavourites = false;
     }
 
     return _.isFunction(done) ? done(null, isAnythingDirty) : isAnythingDirty;
@@ -768,12 +733,6 @@ var async = require('async'),
   var recoverImportedBookmark = function(_bid, callback) {
     if (! flushed && (alreadyImportedAllBookmarks || areBookmarksDirty)) {
       return Data.getImportedBookmark(_bid, callback);
-    }
-    return callback(null, null);
-  };
-  var recoverImportedFavourite = function(_fid, callback) {
-    if (! flushed && (alreadyImportedAllFavourites || areFavouritesDirty)) {
-      return Data.getImportedFavourite(_fid, callback);
     }
     return callback(null, null);
   };
@@ -2277,12 +2236,6 @@ var async = require('async'),
                       votes[_vid] = vote;
                       Data.setVoteImported(_vid, +new Date(), vote, done);
                     };
-
-                    if (vote._action == -1) {
-                      Favourites.downvote(targetPid, voterUid, onCreate);
-                    } else {
-                      Favourites.upvote(targetPid, voterUid, onCreate);
-                    }
                   }
                 });
             });
@@ -2409,113 +2362,6 @@ var async = require('async'),
           Importer.phase('bookmarksImportDone');
 
           fs.remove(DIRTY_BOOKMARKS_FILE, next);
-        });
-    });
-  };
-
-  Importer.importFavourites = function(next) {
-    Importer.phase('favouritesImportStart');
-    Importer.progress(0, 1);
-
-    Importer._lastPercentage = 0;
-
-    var count = 0,
-      imported = 0,
-      alreadyImported = 0,
-      startTime = +new Date(),
-      config = Importer.config();
-
-    fs.writeFileSync(DIRTY_FAVOURITES_FILE, +new Date(), {encoding: 'utf8'});
-
-    Importer.exporter.countFavourites(function(err, total) {
-      Importer.success('Importing ' + total + ' favourites.');
-      Importer.exporter.exportFavourites(
-        function(err, favourites, favouritesArr, nextExportBatch) {
-
-          var onEach = function(favourite, done) {
-            count++;
-            var _fid = favourite._fid;
-
-            recoverImportedFavourite(_fid, function(err, _favourite) {
-              if (_favourite) {
-                imported++;
-                alreadyImported++;
-                Importer.progress(count, total);
-                return done();
-              }
-
-              if (err) {
-                Importer.warn('skipping favourite:_fid: ' + _fid + ' : ' + err);
-                Importer.progress(count, total);
-                return done();
-              }
-
-              Importer.log('[process-count-at:' + count + '] saving favourite:_fid: ' + _fid);
-
-              async.parallel([
-                  function(cb) {
-                    Data.getImportedPost(favourite._pid, function(err, post) {
-                      if (err) {
-                        Importer.warn('getImportedPost: ' + favourite._pid + ' err: ' + err);
-                      }
-                      cb(null, post);
-                    });
-                  },
-                  function(cb) {
-                    Data.getImportedUser(favourite._uid, function(err, user) {
-                      if (err) {
-                        Importer.warn('getImportedUser: ' + favourite._uid + ' err: ' + err);
-                      }
-                      cb(null, user);
-                    });
-                  }
-                ],
-                function(err, results){
-                  var post = results[0];
-                  var user = results[1];
-
-                  if (!post || !user) {
-                    Importer.warn('[process-count-at: ' + count + '] skipping favourite:_fid: '
-                      + _fid + ', post:_pid:' + favourite._pid + ':imported:' + (!!post) + ', user:_uid:' + favourite._uid + ':imported:' + (!!user));
-                    done();
-                  } else {
-
-                    var onCreate = function(err, favouriteReturn) {
-                      if (err) {
-                        Importer.warn('skipping favourite:_fid: ' + _fid + ' : ' + err);
-                        Importer.progress(count, total);
-                        return done();
-                      }
-
-                      Importer.progress(count, total);
-
-                      favourite.imported = true;
-                      imported++;
-                      favourite = extend(true, {}, favourite, favouriteReturn);
-                      favourites[_fid] = favourite;
-
-                      Data.setFavouriteImported(_fid, +new Date, favourite, done);
-                    };
-
-                    Favourites.favourite(post.pid, user.uid, onCreate);
-                  }
-                });
-            });
-          };
-          async.eachSeries(favouritesArr, onEach, nextExportBatch);
-        },
-        {
-          // options
-        },
-        function(err) {
-          if (err) {
-            throw err;
-          }
-          Importer.success('Imported ' + imported + '/' + total + ' favourites' + (alreadyImported ? ' (out of which ' + alreadyImported + ' were already imported at an earlier time)' : ''));
-          Importer.progress(1, 1);
-          Importer.phase('favouritesImportDone');
-
-          fs.remove(DIRTY_FAVOURITES_FILE, next);
         });
     });
   };
@@ -3053,7 +2899,7 @@ var async = require('async'),
 
   Importer.deleteTmpImportedSetsAndObjects = function(done) {
     var phasePrefix = 'deleteTmpImportedSetsAndObjects';
-    async.series(['users', 'groups', 'categories', 'topics', 'posts', 'messages', 'votes', 'bookmarks', 'favourites']
+    async.series(['users', 'groups', 'categories', 'topics', 'posts', 'messages', 'votes', 'bookmarks']
       .reduce(function(series, current) {
         var Current = current[0].toUpperCase() + current.slice(1);
 
