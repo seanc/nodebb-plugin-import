@@ -325,11 +325,12 @@
 		var postImportToolsAvailable = plugin.postImportToolsAvailable = function() {
 			return $.get(plugin.apiHost + '/postImportTools')
 					.done(function(data) {
-						if (data && data.available) {
-							togglePostImportTools(true);
-						} else {
-							togglePostImportTools(false);
-						}
+						// if (data && data.available) {
+						// 	togglePostImportTools(true);
+						// } else {
+						// 	togglePostImportTools(false);
+						// }
+						togglePostImportTools(true);
 					})
 					.fail(function() {
 						togglePostImportTools(false);
